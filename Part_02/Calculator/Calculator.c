@@ -74,7 +74,7 @@ int isPrior(char OperatorInStack, char OperatorInToken)
   return (GetPriority(OperatorInStack, 1) > GetPriority(OperatorInToken, 0));
 }
 
-void GetPostfix(char *InfixExpression, char *PostFixExpression)
+void GetPostfix(char *InfixExpression, char *PostfixExpression)
 {
   LinkedListStack *Stack;
 
@@ -92,7 +92,119 @@ void GetPostfix(char *InfixExpression, char *PostFixExpression)
     if (Type == OPERAND)
     {
       strcat(InfixExpression, Token);
-      // TODO: 여기부터 작성
+      strcat(InfixExpression, " ");
+    }
+    else if (Type == RIGHT_PARENTHESIS)
+    {
+      while (!LLS_IsEmpty(Stack))
+      {
+        Node *Popped = LLS_Pop(Stack);
+
+        if (Popped->Data[0] == LEFT_PARENTHESIS)
+        {
+          LLS_DestroyNode(Popped);
+          break;
+        }
+        else
+        {
+          strcat(PostfixExpression, Popped->Data);
+          LLS_DestroyNode(Popped);
+        }
+      }
+    }
+    else
+    {
+      while (!LLS_IsEmpty(Stack) && !isPrior(LLS_Top(Stack)->Data[0], Token[0]))
+      {
+        Node *Popped = LLS_Pop(Stack);
+
+        if (Popped->Data[0] != LEFT_PARENTHESIS)
+          strcat(PostfixExpression, Popped->Data);
+
+        LLS_DestroyNode(Popped);
+      }
+      LLS_Push(Stack, LLS_CreateNode(Token));
     }
   }
+  while (!LLS_IsEmpty(Stack))
+  {
+    Node *Popped = LLS_Pop(Stack);
+
+    if (Popped->Data[0] != LEFT_PARENTHESIS)
+      strcat(PostfixExpression, Popped->Data);
+
+    LLS_DestroyNode(Popped);
+  }
+
+  LLS_DestroyStack(Stack);
+}
+
+double Calculate(char *PostfixExpression)
+{
+  LinkedListStack *Stack;
+  Node *ResultNode;
+
+  double Result;
+  char Token[32];
+  int Type = -1;
+  unsigned int Read = 0;
+  unsigned int Length = strlen(PostfixExpression);
+
+  LLS_CreateStack(&Stack);
+
+  while (Read < Length)
+  {
+    Read += GetNextToken(&PostfixExpression[Read], Token, &Type);
+
+    if (Type == SPACE)
+      continue;
+
+    if (Type == OPERAND)
+    {
+      Node *NewNode = LLS_CreateNode(Token);
+      LLS_Push(Stack, NewNode);
+    }
+    else
+    {
+      char ResultString[32];
+      double Operator1, Operator2, TempResult;
+      Node *OperatorNode;
+
+      OperatorNode = LLS_Pop(Stack);
+      Operator2 = atof(OperatorNode->Data);
+      LLS_DestroyNode(OperatorNode);
+
+      OperatorNode = LLS_Pop(Stack);
+      Operator1 = atof(OperatorNode->Data);
+      LLS_DestroyNode(OperatorNode);
+
+      switch (Type)
+      {
+      case PLUS:
+        TempResult = Operator1 + Operator2;
+        break;
+      case MINUS:
+        TempResult = Operator1 - Operator2;
+        break;
+      case MULTIPLY:
+        TempResult = Operator1 * Operator2;
+        break;
+      case DIVIDE:
+        TempResult = Operator1 / Operator2;
+        break;
+      }
+
+      gcvt(TempResult, 10, ResultString);
+      LLS_Push(Stack, LLS_CreateNode(ResultString));
+    }
+  }
+
+  ResultNode = LLS_Pop(Stack);
+  Result = atof(ResultNode->Data);
+
+  LLS_DestroyNode(ResultNode);
+
+  LLS_DestroyStack(Stack);
+
+  return Result;
 }
