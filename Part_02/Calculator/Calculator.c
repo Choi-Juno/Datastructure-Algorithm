@@ -91,8 +91,8 @@ void GetPostfix(char *InfixExpression, char *PostfixExpression)
 
     if (Type == OPERAND)
     {
-      strcat(InfixExpression, Token);
-      strcat(InfixExpression, " ");
+      strcat(PostfixExpression, Token);
+      strcat(PostfixExpression, " ");
     }
     else if (Type == RIGHT_PARENTHESIS)
     {
