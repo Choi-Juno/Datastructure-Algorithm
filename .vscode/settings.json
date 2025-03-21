@@ -1,0 +1,19 @@
+{
+  "cSpell.words": [
+    "ARRAYSTACK",
+    "CDLL",
+    "DISJOINTSET",
+    "Inorder",
+    "LCRS",
+    "LINKEDLIST",
+    "PRIORITYQUEUE",
+    "REDBLACKTREE"
+  ],
+  "files.associations": {
+    "linkedlist.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "vector": "c"
+  },
+}
