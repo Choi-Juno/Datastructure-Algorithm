@@ -9,9 +9,22 @@ void Swap(int *A, int *B)
 
 int Partition(int DataSet[], int Left, int Right)
 {
-  int First = Left;
-  int Pivot = DataSet[First]; // Pivot은 기준 요소
+  // Median-of-Three 방법으로 피봇 선택
+  int Mid = (Left + Right) / 2;
 
+  // 첫 번째, 중간, 마지막 요소 중 중간값을 찾아 피봇으로 선택
+  if (DataSet[Left] > DataSet[Mid])
+    Swap(&DataSet[Left], &DataSet[Mid]);
+  if (DataSet[Left] > DataSet[Right])
+    Swap(&DataSet[Left], &DataSet[Right]);
+  if (DataSet[Mid] > DataSet[Right])
+    Swap(&DataSet[Mid], &DataSet[Right]);
+
+  // 중간값을 피봇으로 선택
+  int Pivot = DataSet[Mid];
+  Swap(&DataSet[Mid], &DataSet[Right - 1]); // 피봇을 오른쪽에서 두 번째 위치로 이동
+
+  int First = Left;
   ++Left;
 
   while (Left <= Right)
