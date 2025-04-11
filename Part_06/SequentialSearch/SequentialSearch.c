@@ -14,7 +14,12 @@ void SLL_MoveToFront(Node **Head, int Target)
 
       if (Previous == NULL)
       {
-        // 자신의 이전 노드와 다음 노드를 연결
+        // 이미 헤드에 있는 경우 아무것도 하지 않음
+        break;
+      }
+      else
+      {
+        // 이전 노드와 다음 노드를 연결
         Previous->NextNode = Current->NextNode;
 
         // 자신을 리스트의 헤드로 옮기기
@@ -107,15 +112,4 @@ int SLL_TransposeArray(int *Array, int Size, int Target)
     }
   }
   return targetIndex;
-}
-
-Node *SLL_FrequencyCount(Node **Head, int Target)
-{
-  Node *Current = *Head;
-  Node *Match = NULL;
-  int Frequency = 0;
-
-  while (Current != NULL)
-  {
-  }
 }
