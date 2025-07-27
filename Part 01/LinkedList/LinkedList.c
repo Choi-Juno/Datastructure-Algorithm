@@ -100,19 +100,3 @@ int SLL_GetNodeCount(Node *Head)
 
   return Count;
 }
-
-void SLL_InsertBefore(Node **Head, Node *Current, Node *NewHead)
-{
-  // 1. Current가 Head위치에 위치한 경우
-  if (Current = &Head)
-  {
-    NewHead->NextNode = Current;
-    *Head = NewHead;
-  }
-  // 2. Head가 없는 경우
-  if (*Head == NULL)
-  {
-    printf("Error: Head is NULL\n");
-  }
-  // 3. Current가 Head가 아닌 경우
-}
